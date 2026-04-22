@@ -2,7 +2,7 @@
 
 基于 Three.js 的大语言模型计算过程交互式 3D 可视化演示。
 
-![预览](public/favicon.svg)
+![预览](bb0038564a19f7f12ba64b9a48b58e15.gif)
 
 ## 功能特性
 
