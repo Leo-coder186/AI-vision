@@ -1,0 +1,386 @@
+:root {
+  --neon-blue: #00f3ff;
+  --neon-purple: #9d00ff;
+  --neon-green: #00ff66;
+  --bg-color: #050510;
+  --font-main: 'Orbitron', sans-serif;
+  --font-code: 'Courier Prime', monospace;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  color: white;
+  font-family: var(--font-main);
+  user-select: none;
+}
+
+#app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+.hud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+  padding-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2rem;
+  color: var(--neon-blue);
+  letter-spacing: 4px;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+  font-family: 'Noto Sans SC', var(--font-main);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--neon-green);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--neon-green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--neon-green);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+.hud-panel {
+  width: 450px;
+  background: rgba(5, 5, 16, 0.85);
+  border: 1px solid rgba(0, 243, 255, 0.4);
+  border-radius: 8px;
+  padding: 2rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
+}
+
+.panel-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  font-family: 'Noto Sans SC', var(--font-code);
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.value {
+  color: var(--neon-blue);
+  text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
+}
+
+.log-container {
+  margin-top: 2rem;
+  border-top: 2px dashed rgba(0, 243, 255, 0.3);
+  padding-top: 1.5rem;
+  font-family: 'Noto Sans SC', var(--font-code);
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  height: 180px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  line-height: 1.5;
+}
+
+.log-line {
+  margin-bottom: 4px;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+.log-line.highlight {
+  color: var(--neon-purple);
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+#controls {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  pointer-events: none;
+  text-align: center;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -10px); }
+  100% { transform: translate(-50%, 0); }
+}
+
+/* scanline effect */
+body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.1)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.3;
+}
+
+#stage-overlay {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 30px 60px;
+  border-radius: 12px;
+  border: 1px solid var(--neon-blue);
+  box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+#stage-overlay.visible {
+  opacity: 1;
+}
+
+#stage-big-text {
+  font-size: 3rem;
+  color: var(--neon-blue);
+  margin: 0 0 10px 0;
+  text-shadow: 0 0 20px var(--neon-blue);
+  font-family: 'Noto Sans SC', sans-serif;
+  letter-spacing: 2px;
+}
+
+#stage-sub-text {
+  font-size: 1.5rem;
+  color: var(--neon-purple);
+  margin: 0;
+  font-family: 'Noto Sans SC', sans-serif;
+  text-shadow: 0 0 10px var(--neon-purple);
+}
+
+#chat-box {
+  position: absolute;
+  bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  gap: 10px;
+  width: 90%;
+  max-width: 600px;
+  background: rgba(5, 5, 16, 0.6);
+  padding: 10px;
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+}
+
+#user-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 243, 255, 0.5);
+  padding: 12px 15px;
+  color: var(--neon-blue);
+  font-family: 'Noto Sans SC', var(--font-main);
+  font-size: 1rem;
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+#user-input:focus {
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 10px rgba(157, 0, 255, 0.3);
+}
+
+#user-input::placeholder {
+  color: rgba(0, 243, 255, 0.3);
+}
+
+#submit-btn {
+  background: rgba(0, 243, 255, 0.1);
+  border: 1px solid var(--neon-blue);
+  color: var(--neon-blue);
+  padding: 0 20px;
+  font-family: 'Noto Sans SC', var(--font-main);
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+#submit-btn:hover:not(:disabled) {
+  background: rgba(0, 243, 255, 0.3);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+}
+
+#submit-btn:disabled {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+}
+
+#ai-response-container {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 800px;
+  background: rgba(5, 5, 16, 0.7);
+  border: 1px solid rgba(0, 255, 102, 0.3);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.1);
+  backdrop-filter: blur(8px);
+  z-index: 15;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+
+#ai-response-container.hidden {
+  opacity: 0;
+  transform: translate(-50%, -40%);
+  pointer-events: none;
+}
+
+#ai-response-container h3 {
+  margin: 0 0 1rem 0;
+  color: var(--neon-green);
+  font-family: var(--font-main);
+  text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
+  letter-spacing: 2px;
+}
+
+#ai-response-text {
+  color: #fff;
+  font-family: 'Noto Sans SC', var(--font-main);
+  font-size: 1.2rem;
+  line-height: 1.6;
+  letter-spacing: 1px;
+}
+
+#attention-calc-panel, #ffn-calc-panel {
+  position: absolute;
+  top: 15rem;
+  right: 2rem;
+  width: 380px;
+  background: rgba(10, 5, 20, 0.85);
+  border: 1px solid rgba(157, 0, 255, 0.5);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 0 30px rgba(157, 0, 255, 0.2);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+
+#attention-calc-panel.hidden, #ffn-calc-panel.hidden {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+#attention-calc-panel h3 {
+  margin: 0 0 1rem 0;
+  color: var(--neon-purple);
+  font-family: var(--font-main);
+  text-shadow: 0 0 10px rgba(157, 0, 255, 0.5);
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+#ffn-calc-panel {
+  border-color: rgba(0, 255, 102, 0.5);
+  box-shadow: 0 0 30px rgba(0, 255, 102, 0.2);
+}
+
+#ffn-calc-panel h3 {
+  margin: 0 0 1rem 0;
+  color: var(--neon-green);
+  font-family: var(--font-main);
+  text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+#qkv-log, #ffn-log {
+  color: #fff;
+  font-family: var(--font-code);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.hlt-q { color: #ff3366; text-shadow: 0 0 5px #ff3366; }
+.hlt-k { color: #33ff66; text-shadow: 0 0 5px #33ff66; }
+.hlt-v { color: #33ccff; text-shadow: 0 0 5px #33ccff; }
+.hlt-ffn { color: #00ff66; text-shadow: 0 0 5px #00ff66; }

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI 核心神经网络可视化</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+SC:wght@400;700&family=Courier+Prime&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <div id="hud">
+      <div class="hud-header">
+        <h1>核心神经网络系统</h1>
+        <div class="status-indicator">
+          <span class="dot"></span>
+          <span id="status-text">系统就绪</span>
+        </div>
+      </div>
+      <div class="hud-panel">
+        <div class="panel-row">
+          <span class="label">计算阶段:</span>
+          <span id="stage-text" class="value">00 / 待机状态</span>
+        </div>
+        <div class="panel-row">
+          <span class="label">向量维度:</span>
+          <span id="dim-text" class="value">0</span>
+        </div>
+        <div class="panel-row">
+          <span class="label">激活参数:</span>
+          <span id="params-text" class="value">0.0B</span>
+        </div>
+        <div class="log-container" id="log-container">
+          <div class="log-line">> 系统引导程序已启动。</div>
+          <div class="log-line">> 核心矩阵已加载。</div>
+          <div class="log-line">> 等待输入信号...</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="attention-calc-panel" class="hidden">
+      <h3>ATTENTION MATRIX //</h3>
+      <div id="qkv-log"></div>
+    </div>
+
+    <div id="ffn-calc-panel" class="hidden">
+      <h3>FFN ACTIVATION //</h3>
+      <div id="ffn-log"></div>
+    </div>
+
+    <div id="stage-overlay">
+      <h2 id="stage-big-text">第一步: 等待输入</h2>
+      <p id="stage-sub-text">大语言模型准备就绪</p>
+    </div>
+
+    <div id="controls">
+      <p>拖拽鼠标探索高维混合空间</p>
+    </div>
+
+    <div id="ai-response-container" class="hidden">
+      <h3>MODEL.OUTPUT //</h3>
+      <div id="ai-response-text"></div>
+    </div>
+
+    <div id="chat-box">
+      <input type="text" id="user-input" placeholder="输入要计算的问题..." autocomplete="off" />
+      <button id="submit-btn" type="button">开始计算</button>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

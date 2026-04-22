@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node test-api.js)",
+      "Bash(MINIMAX_API_KEY=sk-cp-hup59XJ8iDZKgQTu83rG7yUXSnCsWh7OQYxALXHGNtpfhalCkqmQyj7a1Z1RsFCU4DViKxk_ToVLPQcnNyvAhrViSNRhExPU680MbHWx0LPHlG0nX63Ev1c node test-api.js)",
+      "Bash(node --env-file=.env server.mjs)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(curl -s -X POST http://localhost:3000/api/chat -H \"Content-Type: application/json\" -d '{\"question\":\"hello\"}')"
+    ]
+  }
+}
